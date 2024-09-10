@@ -1,0 +1,651 @@
+---
+#-
+#  _ _       _     _
+# | (_) __ _| |__ | |_
+# | | |/ _` | '_ \| __|
+# | | | (_| | | | | |_
+# |_|_|\__, |_| |_|\__|
+#      |___/
+#
+#- from github.com/basnijholt/home-assistant-config
+
+#     _         _                        _   _        _ _       _     _
+#    / \  _   _| |_ ___  _ __ ___   __ _| |_(_) ___  | (_) __ _| |__ | |_ ___
+#   / _ \| | | | __/ _ \| '_ ` _ \ / _` | __| |/ __| | | |/ _` | '_ \| __/ __|
+#  / ___ \ |_| | || (_) | | | | | | (_| | |_| | (__  | | | (_| | | | | |_\__ \
+# /_/   \_\__,_|\__\___/|_| |_| |_|\__,_|\__|_|\___| |_|_|\__, |_| |_|\__|___/
+#                                                         |___/
+
+# _     _       _
+# | |   (_)_   _(_)_ __   __ _   _ __ ___   ___  _ __ ___
+# | |   | \ \ / / | '_ \ / _` | | '__/ _ \ / _ \| '_ ` _ \
+# | |___| |\ V /| | | | | (_| | | | | (_) | (_) | | | | | |
+# |_____|_| \_/ |_|_| |_|\__, | |_|  \___/ \___/|_| |_| |_|
+#                        |___/
+
+- alias: "Light: turn on living room"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.activity_in_living_room
+    to: "on"
+  condition:
+    condition: state
+    entity_id: input_boolean.guest_mode
+    state: "off"
+  action:
+    service: light.turn_on
+    entity_id: light.living_room_lights
+
+- alias: "Light: turn off living room"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.activity_in_living_room
+      to: "off"
+    - platform: state
+      entity_id: input_select.sleep_mode
+      from: total
+  condition:
+    condition: state
+    entity_id: input_boolean.guest_mode
+    state: "off"
+  action:
+    service: light.turn_off
+    entity_id: light.living_room_lights
+
+- alias: "Light: turn on Chrismas tree"
+  trigger:
+    - platform: state
+      entity_id: input_select.sleep_mode
+      to:
+        - "off"
+        - "half"
+    - platform: state
+      entity_id: binary_sensor.someone_in_the_house_in_last_hour
+      to: "on"
+  condition:
+    condition: state
+    entity_id: binary_sensor.someone_in_the_house_in_last_hour
+    state: "on"
+  action:
+    service: switch.turn_on
+    entity_id: switch.christmas_tree
+
+- alias: "Light: turn off Chrismas tree"
+  trigger:
+    - platform: state
+      entity_id: input_select.sleep_mode
+      to: "total"
+    - platform: state
+      entity_id: binary_sensor.someone_in_the_house_in_last_hour
+      to: "off"
+  action:
+    service: switch.turn_off
+    entity_id: switch.christmas_tree
+
+
+#  _  ___ _       _
+# | |/ (_) |_ ___| |__   ___ _ __
+# | ' /| | __/ __| '_ \ / _ \ '_ \
+# | . \| | || (__| | | |  __/ | | |
+# |_|\_\_|\__\___|_| |_|\___|_| |_|
+
+- alias: "Light: toggle dinner area lights"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.activity_in_dinner_area
+  condition:
+    - condition: state
+      entity_id: input_boolean.automatic_dinner_area_light
+      state: "on"
+    - condition: state
+      entity_id: input_select.sleep_mode
+      state: "off"
+    - condition: state
+      entity_id: input_boolean.guest_mode
+      state: "off"
+  action:
+    service: light.turn_{{ trigger.to_state.state }}
+    data:
+      entity_id: light.dinner_area
+
+- alias: "Light: turn off automatic dinner area lights when turning off lights after 18:00"
+  condition:
+    - condition: state
+      entity_id: input_boolean.automatic_dinner_area_light
+      state: "on"
+    - condition: time
+      after: "18:00:00"
+  trigger:
+    platform: state
+    entity_id: light.dinner_area
+    to: "off"
+  action:
+    service: input_boolean.turn_off
+    entity_id: input_boolean.automatic_dinner_area_light
+
+- alias: "Light: reset automatic dinner area lights at 06:00"
+  trigger:
+    platform: time
+    at: "06:00:00"
+  action:
+    service: input_boolean.turn_on
+    entity_id: input_boolean.automatic_dinner_area_light
+
+- alias: "Light: turn on kitchen counter if sleep mode is off"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.activity_in_kitchen
+    to: "on"
+  condition:
+    condition: state
+    entity_id: input_select.sleep_mode
+    state:
+      - "off"
+      - "half"
+  action:
+    service: light.turn_on
+    entity_id: light.kitchen_counter
+
+- alias: "Light: turn off kitchen counter"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.activity_in_kitchen
+    to: "off"
+  action:
+    service: light.turn_off
+    entity_id: light.kitchen_counter
+
+- alias: "Light: reboot kitchen ceiling Shelly"
+  trigger:
+    platform: time
+    at: "05:00:00"
+  action:
+    service: shell_command.reboot_kitchen_ceiling
+
+#  ____        _   _
+# | __ )  __ _| |_| |__  _ __ ___   ___  _ __ ___
+# |  _ \ / _` | __| '_ \| '__/ _ \ / _ \| '_ ` _ \
+# | |_) | (_| | |_| | | | | | (_) | (_) | | | | | |
+# |____/ \__,_|\__|_| |_|_|  \___/ \___/|_| |_| |_|
+#
+
+- alias: "Light: turn on bathroom"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.activity_in_bathroom
+    to: "on"
+  condition: "{{ states('input_select.sleep_mode') != 'total' }}"
+  action:
+    service: light.turn_on
+    data:
+      entity_id: light.bathroom_lights
+      transition: 1
+
+- alias: "Light: turn off bathroom"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.activity_in_bathroom
+    to: "off"
+  action:
+    service: light.turn_off
+    data:
+      entity_id: light.bathroom_lights
+      transition: 1
+
+  #  _   _       _ _                   _       _        _
+  # | | | | __ _| | |   __ _ _ __   __| |  ___| |_ __ _(_)_ __ ___
+  # | |_| |/ _` | | |  / _` | '_ \ / _` | / __| __/ _` | | '__/ __|
+  # |  _  | (_| | | | | (_| | | | | (_| | \__ \ || (_| | | |  \__ \
+  # |_| |_|\__,_|_|_|  \__,_|_| |_|\__,_| |___/\__\__,_|_|_|  |___/
+
+- alias: "Light: turn on hall"
+  mode: parallel
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.activity_in_hall
+      from: "off"
+      to: "on"
+    - platform: state
+      entity_id: binary_sensor.openclose_front_door
+      from: "off"
+      to: "on"
+  variables:
+    off_lights: >
+      {% set hall_lights = ["light.hall_2"]
+        if is_state('input_select.sleep_mode', 'total')
+        else ["light.hall_1", "light.hall_2", "light.hall_3"] %}
+      {{ expand(state_attr("light.stairs_lights", "entity_id") + hall_lights)
+        | selectattr("state", "eq", "off")
+        | map(attribute="entity_id")
+        | list }}
+  condition: "{{ (off_lights | length) > 0 }}"
+  action:
+    alias: Turn on lights that are off
+    repeat:
+      count: "{{ off_lights | length }}"
+      sequence:
+        service: script.turn_on_lights
+        data:
+          entity_id: "{{ off_lights[repeat.index - 1] }}"
+
+- alias: "Light: turn off hall"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.activity_in_hall
+    from: "on"
+    to: "off"
+  action:
+    service: light.turn_off
+    data:
+      entity_id:
+        - light.stairs_lights
+        - light.hall_lights
+      transition: 1
+
+  #  ____           _
+  # | __ )  ___  __| |_ __ ___   ___  _ __ ___
+  # |  _ \ / _ \/ _` | '__/ _ \ / _ \| '_ ` _ \
+  # | |_) |  __/ (_| | | | (_) | (_) | | | | | |
+  # |____/ \___|\__,_|_|  \___/ \___/|_| |_| |_|
+
+- alias: "Light: automatically turn on the bedroom"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.activity_in_master_bedroom
+    to: "on"
+  variables:
+    off_lights: >
+      {{ expand(state_attr("light.bedroom_lights", "entity_id"))
+          | selectattr("state", "eq", "off")
+          | map(attribute="entity_id")
+          | list }}
+  condition:
+    - "{{ (off_lights | length) > 0 }}"
+    - condition: state
+      entity_id: input_select.sleep_mode
+      state: "off"
+    - condition: state
+      entity_id: input_boolean.automatic_bedroom_lights
+      state: "on"
+  action:
+    - alias: Turn on lights that are off
+      repeat:
+        count: "{{ off_lights | length }}"
+        sequence:
+          service: script.turn_on_lights
+          data:
+            entity_id: "{{ off_lights[repeat.index - 1] }}"
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.bedroom_lights_automatically_turned_on
+
+- alias: "Light: automatically turn off the bedroom"
+  initial_state: "on"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.activity_in_master_bedroom
+    to: "off"
+    for: "00:08:00"
+  condition:
+    - condition: state
+      entity_id: input_boolean.bedroom_lights_automatically_turned_on
+      state: "on"
+    - condition: state
+      entity_id: light.bedroom_lights
+      state: "on"
+    - condition: state
+      entity_id: input_boolean.automatic_bedroom_lights
+      state: "on"
+  action:
+    service: light.turn_off
+    entity_id: light.bedroom_lights
+    data:
+      transition: 10
+
+- alias: "Light: turn off bedroom lights auto switch"
+  mode: parallel
+  trigger:
+    - platform: state
+      entity_id: light.bedroom_lights
+      to: "off"
+    - platform: event
+      event_type: deconz_event
+      event_data:
+        id: dimmer_switch_bedroom
+    - platform: event
+      event_type: deconz_event
+      event_data:
+        id: smart_switch_bedroom_bas
+    - platform: event
+      event_type: deconz_event
+      event_data:
+        id: smart_switch_bedroom_marcella
+  condition:
+    condition: state
+    entity_id: input_boolean.bedroom_lights_automatically_turned_on
+    state: "on"
+  action:
+    service: input_boolean.turn_off
+    entity_id: input_boolean.bedroom_lights_automatically_turned_on
+
+- alias: "Light: turn on automatic_bedroom_lights switch"
+  trigger:
+    platform: time
+    at: "12:00"
+  action:
+    entity_id: input_boolean.automatic_bedroom_lights
+    service: input_boolean.turn_on
+
+- alias: "Light: turn off bedroom after 2 hours of inactivity"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.activity_in_master_bedroom
+    from: "on"
+    to: "off"
+    for: "02:00:00"
+  condition: "{{ is_state('light.bedroom_lights', 'on') }}"
+  action:
+    service: light.turn_off
+    data:
+      entity_id: light.bedroom_lights
+
+- alias: "Light: reboot bedroom ceiling Shelly"
+  trigger:
+    platform: time
+    at: "13:00:00"
+  action:
+    service: shell_command.reboot_bedroom_ceiling
+
+- alias: 'Light: Update input_select when bedroom lights turned off'
+  description: "Set the input_select.last_script_bedroom such that colored lights will be chosen"
+  trigger:
+    platform: state
+    entity_id: light.bedroom_lights
+    to: 'off'
+  action:
+    service: input_select.select_option
+    data:
+      entity_id: input_select.last_script_bedroom
+      option: 'script.white_lights_bedroom'
+
+#        _   _ _ _ _                                                          _                _       _     _
+#  _   _| |_(_) (_) |_ _   _     _ __ ___   ___  _ __ ___      __ _ _ __   __| |    ___  _   _| |_ ___(_) __| | ___
+# | | | | __| | | | __| | | |   | '__/ _ \ / _ \| '_ ` _ \    / _` | '_ \ / _` |   / _ \| | | | __/ __| |/ _` |/ _ \
+# | |_| | |_| | | | |_| |_| |   | | | (_) | (_) | | | | | |  | (_| | | | | (_| |  | (_) | |_| | |_\__ \ | (_| |  __/
+#  \__,_|\__|_|_|_|\__|\__, |___|_|  \___/ \___/|_| |_| |_|___\__,_|_| |_|\__,_|___\___/ \__,_|\__|___/_|\__,_|\___|
+#                      |___/_____|                       |_____|              |_____|
+#
+#   __                 _          _
+#  / _|_ __ ___  _ __ | |_     __| | ___   ___  _ __
+# | |_| '__/ _ \| '_ \| __|   / _` |/ _ \ / _ \| '__|
+# |  _| | | (_) | | | | |_   | (_| | (_) | (_) | |
+# |_| |_|  \___/|_| |_|\__|___\__,_|\___/ \___/|_|
+#                        |_____|
+
+- alias: "Light: turn on utility room / garage outside"
+  trigger:
+    - platform: state
+      to: "on"
+      entity_id: binary_sensor.activity_in_utility_room
+    - platform: state
+      to: "on"
+      entity_id: binary_sensor.activity_outside_front_door
+    - platform: state
+      to: "on"
+      entity_id: binary_sensor.activity_outside_garage
+  action:
+    - service: light.turn_on
+      data:
+        entity_id:
+          - light.utility_room
+        transition: 1
+    # Only turn on these lights when it is (almost) dark
+    - if: "{{ state_attr('sun.sun', 'elevation') < 6 }}"
+      then:
+        - service: light.turn_on
+          data:
+            entity_id:
+              - light.outside_front_door
+              - light.garage_outside
+        - service: switch.turn_on
+          data:
+            entity_id: switch.string_lights_outside
+
+- alias: "Light: turn off utility room / garage outside"
+  trigger:
+    - platform: state
+      to: "off"
+      entity_id: binary_sensor.activity_in_utility_room
+    - platform: state
+      to: "off"
+      entity_id: binary_sensor.activity_outside_front_door
+    - platform: state
+      to: "off"
+      entity_id: binary_sensor.activity_outside_garage
+  action:
+    - if: "{{ is_state('binary_sensor.activity_in_utility_room', 'off') }}"
+      then:
+        - service: light.turn_off
+          entity_id: light.utility_room
+    - if: "{{ is_state('binary_sensor.activity_outside_house', 'off') }}"
+      then:
+        - service: light.turn_off
+          data:
+            entity_id:
+              - light.outside_front_door
+              - light.garage_outside
+        - service: switch.turn_off
+          data:
+            entity_id: switch.string_lights_outside
+
+- alias: "Light: turn on the outside front light"
+  trigger:
+    - platform: sun
+      event: sunset
+      offset: "-01:00:00"
+    - platform: sun
+      event: sunrise
+      offset: "-02:00:00"
+  action:
+    service: light.turn_on
+    entity_id: light.front_house
+
+- alias: "Light: turn off the outside front light"
+  trigger:
+    - platform: time
+      at: "01:00:00"
+    - platform: sun
+      event: sunrise
+      offset: "+01:00:00"
+  action:
+    service: light.turn_off
+    entity_id: light.front_house
+#                        _
+#   __ _ _   _  ___  ___| |_     _ __ ___   ___  _ __ ___
+#  / _` | | | |/ _ \/ __| __|   | '__/ _ \ / _ \| '_ ` _ \
+# | (_| | |_| |  __/\__ \ |_    | | | (_) | (_) | | | | | |
+#  \__, |\__,_|\___||___/\__|___|_|  \___/ \___/|_| |_| |_|
+#  |___/                   |_____|
+#
+
+- alias: "Light: toggle guest room"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.activity_in_guest_room
+  condition:
+    - condition: state
+      entity_id: input_boolean.guest_mode
+      state: "off"
+  action:
+    service: light.turn_{{ trigger.to_state.state }}
+    data:
+      entity_id: light.guest_room_lights
+      transition: 1
+
+#  _           _
+# | |__   __ _| |__  _   _     _ __ ___   ___  _ __ ___
+# | '_ \ / _` | '_ \| | | |   | '__/ _ \ / _ \| '_ ` _ \
+# | |_) | (_| | |_) | |_| |   | | | (_) | (_) | | | | | |
+# |_.__/ \__,_|_.__/ \__, |___|_|  \___/ \___/|_| |_| |_|
+#                    |___/_____|
+
+- alias: "Light: toggle baby room"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.activity_in_baby_room
+  action:
+    - service: light.turn_{{ trigger.to_state.state }}
+      data:
+        entity_id: light.baby_sphere
+    - service: light.turn_{{ trigger.to_state.state }}
+      data:
+        entity_id: light.baby_room_lights
+        transition: 1
+#  _____      _                    _               _
+# | ____|_  _| |_ _ __ __ _    ___| |__   ___  ___| | _____
+# |  _| \ \/ / __| '__/ _` |  / __| '_ \ / _ \/ __| |/ / __|
+# | |___ >  <| |_| | | (_| | | (__| | | |  __/ (__|   <\__ \
+# |_____/_/\_\\__|_|  \__,_|  \___|_| |_|\___|\___|_|\_\___/
+
+- alias: "Light: turn off living room (extra check)"
+  description: In case the other automation failed
+  trigger:
+    platform: time_pattern
+    minutes: "/60"
+  condition:
+    - condition: state
+      entity_id: binary_sensor.activity_in_living_room
+      state: "off"
+    - condition: state
+      entity_id: light.living_room_lights
+      state: "on"
+  action:
+    service: light.turn_off
+    entity_id: light.living_room_lights
+
+- alias: "Light: turn off guest room (extra check)"
+  description: In case the other automation failed
+  trigger:
+    platform: time_pattern
+    minutes: "/10"
+  condition:
+    - condition: state
+      entity_id: binary_sensor.activity_in_guest_room
+      state: "off"
+    - condition: state
+      entity_id: light.guest_room_lights
+      state: "on"
+  action:
+    service: light.turn_off
+    entity_id: light.guest_room_lights
+
+- alias: "Light: turn off baby room (extra check)"
+  description: In case the other automation failed
+  trigger:
+    platform: time_pattern
+    minutes: "/10"
+  condition:
+    - condition: state
+      entity_id: binary_sensor.activity_in_baby_room
+      state: "off"
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: light.baby_sphere
+          state: "on"
+        - condition: state
+          entity_id: light.baby_room_lights
+          state: "on"
+  action:
+    service: light.turn_off
+    entity_id:
+      - light.baby_room_lights
+
+- alias: "Light: turn off bedroom (extra check)"
+  description: In case the other automation failed
+  trigger:
+    platform: time_pattern
+    minutes: "/30"
+  condition:
+    - condition: state
+      entity_id: binary_sensor.activity_in_master_bedroom
+      state: "off"
+    - condition: state
+      entity_id: input_boolean.automatic_bedroom_lights
+      state: "on"
+    - condition: state
+      entity_id: input_boolean.bedroom_lights_automatically_turned_on
+      state: "on"
+  action:
+    - service: light.turn_off
+      entity_id: light.bedroom_lights
+    - service: light.turn_off
+      entity_id: input_boolean.bedroom_lights_automatically_turned_on
+
+- alias: "Light: turn off utility room / garage (extra check)"
+  description: In case the other automation failed
+  trigger:
+    platform: time_pattern
+    minutes: "/10"
+  condition:
+    - condition: state
+      entity_id: binary_sensor.activity_in_utility_room
+      state: "off"
+    - condition: state
+      entity_id: binary_sensor.activity_outside_front_door
+      state: "off"
+    - condition: state
+      entity_id: binary_sensor.activity_outside_garage
+      state: "off"
+    - condition: or
+      conditions:
+        - condition: state
+          entity_id: light.utility_room
+          state: "on"
+        - condition: state
+          entity_id: light.garage_outside
+          state: "on"
+        - condition: state
+          entity_id: light.outside_front_door
+          state: "on"
+  action:
+    service: light.turn_off
+    entity_id:
+      - light.utility_room
+      - light.garage_outside
+      - light.outside_front_door
+
+- alias: "Light: Update Zigbee2MQTT lights input_select options"
+  trigger:
+    platform: mqtt
+    topic: zigbee2mqtt/bridge/devices
+  action:
+    - variables:
+        devices: "{{ trigger.payload_json }}"
+    - variables:
+        z2m_lights: >-
+          {% set ns = namespace(lights=[]) %}
+          {% for device in devices %}
+            {% if device.definition is not none %}
+              {% for expose in device.definition.exposes %}
+                {% if expose.type == 'light' %}
+                  {% set light_name = device.friendly_name %}
+                  {% set ns.lights = ns.lights + [light_name] %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+          {{ ns.lights }}
+    - service: input_select.set_options
+      target:
+        entity_id: input_select.z2m_lights
+      data:
+        options: "{{ z2m_lights }}"
+
+- alias: "Light: Update Zigbee2MQTT Lights State"
+  description: 'Refresh the state of all Zigbee2MQTT lights'
+  trigger:
+    platform: time_pattern
+    minutes: "/5"
+  action:
+    service: script.sync_z2m_to_ha_lights
+  mode: single

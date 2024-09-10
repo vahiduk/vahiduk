@@ -1,0 +1,263 @@
+2024-09-06 17:58:47.525 WARNING (SyncWorker_0) [homeassistant.loader] We found a custom integration frigate which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant
+2024-09-06 17:58:47.527 WARNING (SyncWorker_0) [homeassistant.loader] We found a custom integration meross_cloud which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant
+2024-09-06 17:58:47.530 WARNING (SyncWorker_0) [homeassistant.loader] We found a custom integration hacs which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant
+2024-09-06 17:58:47.532 WARNING (SyncWorker_0) [homeassistant.loader] We found a custom integration meross_lan which has not been tested by Home Assistant. This component might cause stability problems, be sure to disable it if you experience issues with Home Assistant
+2024-09-06 17:59:03.910 WARNING (MainThread) [homeassistant.util.loop] Detected blocking call to load_default_certs with args (<ssl.SSLContext object at 0x7f38b2293650>,) inside the event loop by custom integration 'meross_lan' at custom_components/meross_lan/merossclient/mqttclient.py, line 348: self.tls_set(cert_reqs=ssl.CERT_REQUIRED, tls_version=ssl.PROTOCOL_TLS_CLIENT) (offender: /usr/local/lib/python3.12/site-packages/paho/mqtt/client.py, line 806: context.load_default_certs()), please create a bug report at https://github.com/krahabb/meross_lan/issues
+For developers, please see https://developers.home-assistant.io/docs/asyncio_blocking_operations/#load_default_certs
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/usr/src/homeassistant/homeassistant/__main__.py", line 223, in <module>
+    sys.exit(main())
+  File "/usr/src/homeassistant/homeassistant/__main__.py", line 209, in main
+    exit_code = runner.run(runtime_conf)
+  File "/usr/src/homeassistant/homeassistant/runner.py", line 189, in run
+    return loop.run_until_complete(setup_and_run_hass(runtime_config))
+  File "/usr/local/lib/python3.12/asyncio/base_events.py", line 674, in run_until_complete
+    self.run_forever()
+  File "/usr/local/lib/python3.12/asyncio/base_events.py", line 641, in run_forever
+    self._run_once()
+  File "/usr/local/lib/python3.12/asyncio/base_events.py", line 1990, in _run_once
+    handle._run()
+  File "/usr/local/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/usr/src/homeassistant/homeassistant/config_entries.py", line 752, in async_setup_locked
+    await self.async_setup(hass, integration=integration)
+  File "/usr/src/homeassistant/homeassistant/config_entries.py", line 604, in async_setup
+    result = await component.async_setup_entry(hass, self)
+  File "/config/custom_components/meross_lan/__init__.py", line 601, in async_setup_entry
+    await profile.async_init()
+  File "/config/custom_components/meross_lan/meross_profile.py", line 950, in async_init
+    mqttconnection = MerossMQTTConnection(self, broker)
+  File "/config/custom_components/meross_lan/meross_profile.py", line 757, in __init__
+    MerossMQTTAppClient.__init__(
+  File "/config/custom_components/meross_lan/merossclient/mqttclient.py", line 348, in __init__
+    self.tls_set(cert_reqs=ssl.CERT_REQUIRED, tls_version=ssl.PROTOCOL_TLS_CLIENT)
+
+2024-09-06 19:21:02.215 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-06 19:21:02.217 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-06 19:52:51.332 ERROR (MainThread) [aiohttp.server] Error handling request
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/aiohttp/web_protocol.py", line 362, in data_received
+    messages, upgraded, tail = self._request_parser.feed_data(data)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "aiohttp/_http_parser.pyx", line 563, in aiohttp._http_parser.HttpParser.feed_data
+aiohttp.http_exceptions.BadHttpMessage: 400, message:
+  Pause on PRI/Upgrade:
+
+    b''
+      ^
+2024-09-06 20:36:36.632 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-06 20:36:36.633 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-06 20:37:12.724 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-06 20:37:12.725 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-06 20:37:26.962 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-06 20:37:26.963 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-06 20:55:23.239 ERROR (MainThread) [homeassistant.components.shelly] Error fetching shellydimmer2-C8C9A325BC42 data: Error fetching data: DeviceConnectionTimeoutError(TimeoutError())
+2024-09-06 21:12:07.552 ERROR (MainThread) [aiohttp.server] Error handling request
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/aiohttp/web_protocol.py", line 362, in data_received
+    messages, upgraded, tail = self._request_parser.feed_data(data)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "aiohttp/_http_parser.pyx", line 563, in aiohttp._http_parser.HttpParser.feed_data
+aiohttp.http_exceptions.BadHttpMessage: 400, message:
+  Pause on PRI/Upgrade:
+
+    b''
+      ^
+2024-09-06 22:29:16.748 ERROR (MainThread) [aiohttp.server] Error handling request
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/aiohttp/web_protocol.py", line 362, in data_received
+    messages, upgraded, tail = self._request_parser.feed_data(data)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "aiohttp/_http_parser.pyx", line 563, in aiohttp._http_parser.HttpParser.feed_data
+aiohttp.http_exceptions.BadHttpMessage: 400, message:
+  Pause on PRI/Upgrade:
+
+    b''
+      ^
+2024-09-07 09:33:06.205 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-07 09:33:06.206 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-07 09:34:15.396 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-07 09:34:15.398 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-07 09:35:03.463 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-07 09:35:03.467 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-07 10:27:43.855 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-07 10:27:43.856 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-07 11:22:57.303 ERROR (MainThread) [aiohttp.server] Error handling request
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/aiohttp/web_protocol.py", line 362, in data_received
+    messages, upgraded, tail = self._request_parser.feed_data(data)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "aiohttp/_http_parser.pyx", line 563, in aiohttp._http_parser.HttpParser.feed_data
+aiohttp.http_exceptions.BadStatusLine: 400, message:
+  Invalid method encountered:
+
+    b'SSTP_DUPLEX_POST /sra_{BA195980-CD49-458b-9E23-C84EE0ADCD75}/ HTTP/1.1'
+       ^
+2024-09-07 11:57:22.567 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-07 11:57:22.570 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-07 11:58:05.678 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-07 11:58:05.680 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-07 12:43:04.198 ERROR (MainThread) [aiohttp.server] Error handling request
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/aiohttp/web_protocol.py", line 362, in data_received
+    messages, upgraded, tail = self._request_parser.feed_data(data)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "aiohttp/_http_parser.pyx", line 563, in aiohttp._http_parser.HttpParser.feed_data
+aiohttp.http_exceptions.BadHttpMessage: 400, message:
+  Pause on PRI/Upgrade:
+
+    b''
+      ^
+2024-09-07 13:36:47.529 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a potential harmful request to: /cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh
+2024-09-07 13:36:47.825 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a potential harmful request to: /cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh
+2024-09-07 13:37:04.521 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a request with a potential harmful query string: /index.php?lang=../../../../../../../../usr/local/lib/php/pearcmd&+config-create+/&/<?echo(md5("hi"));?>+/tmp/index1.php
+2024-09-07 13:37:04.912 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a request with a potential harmful query string: /index.php?lang=../../../../../../../../tmp/index1
+2024-09-07 13:49:26.015 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-07 13:49:26.020 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-07 13:54:24.695 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-07 13:54:24.695 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-07 15:06:40.929 WARNING (MainThread) [homeassistant.components.websocket_api.http.connection] [139881312757376] from 82.132.215.181 (Home Assistant/2024.8.1 (io.robbie.HomeAssistant; build:2024.791; iOS 17.6.1)): Disconnected: Did not receive auth message within 10 seconds
+2024-09-07 17:41:12.435 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-07 17:41:12.436 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-07 17:42:37.511 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-07 17:42:37.513 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-07 17:43:19.088 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-07 17:43:19.090 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-07 19:03:31.856 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a potential harmful request to: /cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh
+2024-09-07 19:03:32.069 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a potential harmful request to: /cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh
+2024-09-07 19:03:40.244 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a request with a potential harmful query string: /index.php?lang=../../../../../../../../usr/local/lib/php/pearcmd&+config-create+/&/<?echo(md5("hi"));?>+/tmp/index1.php
+2024-09-07 19:03:40.412 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a request with a potential harmful query string: /index.php?lang=../../../../../../../../tmp/index1
+2024-09-07 19:19:49.506 ERROR (MainThread) [aiohttp.server] Error handling request
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/aiohttp/web_protocol.py", line 362, in data_received
+    messages, upgraded, tail = self._request_parser.feed_data(data)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "aiohttp/_http_parser.pyx", line 563, in aiohttp._http_parser.HttpParser.feed_data
+aiohttp.http_exceptions.BadHttpMessage: 400, message:
+  Pause on PRI/Upgrade:
+
+    b''
+      ^
+2024-09-07 23:50:44.353 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a potential harmful request to: /cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh
+2024-09-07 23:50:44.702 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a potential harmful request to: /cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh
+2024-09-07 23:50:58.733 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a request with a potential harmful query string: /index.php?lang=../../../../../../../../usr/local/lib/php/pearcmd&+config-create+/&/<?echo(md5("hi"));?>+/tmp/index1.php
+2024-09-07 23:50:59.097 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a request with a potential harmful query string: /index.php?lang=../../../../../../../../tmp/index1
+2024-09-08 01:04:27.375 ERROR (MainThread) [homeassistant.components.http.forwarded] A request from a reverse proxy was received from 219.153.113.99, but your HTTP integration is not set-up for reverse proxies
+2024-09-08 05:46:15.095 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a potential harmful request to: /cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh
+2024-09-08 05:46:15.411 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a potential harmful request to: /cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh
+2024-09-08 05:46:35.951 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a request with a potential harmful query string: /index.php?lang=../../../../../../../../usr/local/lib/php/pearcmd&+config-create+/&/<?echo(md5("hi"));?>+/tmp/index1.php
+2024-09-08 05:46:36.270 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a request with a potential harmful query string: /index.php?lang=../../../../../../../../tmp/index1
+2024-09-08 07:45:52.539 ERROR (MainThread) [aiohttp.server] Error handling request
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/aiohttp/web_protocol.py", line 362, in data_received
+    messages, upgraded, tail = self._request_parser.feed_data(data)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "aiohttp/_http_parser.pyx", line 563, in aiohttp._http_parser.HttpParser.feed_data
+aiohttp.http_exceptions.BadHttpMessage: 400, message:
+  Pause on PRI/Upgrade:
+
+    b''
+      ^
+2024-09-08 07:56:00.461 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a potential harmful request to: /cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh
+2024-09-08 07:56:00.786 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a potential harmful request to: /cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh
+2024-09-08 07:56:21.288 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a request with a potential harmful query string: /index.php?lang=../../../../../../../../usr/local/lib/php/pearcmd&+config-create+/&/<?echo(md5("hi"));?>+/tmp/index1.php
+2024-09-08 07:56:21.611 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a request with a potential harmful query string: /index.php?lang=../../../../../../../../tmp/index1
+2024-09-08 10:34:11.362 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-08 10:34:11.363 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-08 10:36:25.485 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-08 10:36:25.487 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-08 10:38:13.936 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-08 10:38:13.937 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-08 10:49:23.927 ERROR (MainThread) [homeassistant.components.shelly] Error fetching shellydimmer2-C45BBE7778A2 data: Error fetching data: DeviceConnectionTimeoutError(TimeoutError())
+2024-09-08 14:07:01.817 ERROR (MainThread) [aiohttp.server] Error handling request
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/aiohttp/web_protocol.py", line 362, in data_received
+    messages, upgraded, tail = self._request_parser.feed_data(data)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "aiohttp/_http_parser.pyx", line 563, in aiohttp._http_parser.HttpParser.feed_data
+aiohttp.http_exceptions.BadHttpMessage: 400, message:
+  Pause on PRI/Upgrade:
+
+    b''
+      ^
+2024-09-08 16:53:54.189 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a potential harmful request to: /cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh
+2024-09-08 16:53:54.498 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a potential harmful request to: /cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh
+2024-09-08 16:54:10.388 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a request with a potential harmful query string: /index.php?lang=../../../../../../../../usr/local/lib/php/pearcmd&+config-create+/&/<?echo(md5("hi"));?>+/tmp/index1.php
+2024-09-08 16:54:10.736 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a request with a potential harmful query string: /index.php?lang=../../../../../../../../tmp/index1
+2024-09-08 17:30:29.811 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-08 17:30:29.821 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-08 17:32:09.413 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-08 17:32:09.419 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-08 19:22:52.392 ERROR (MainThread) [aiohttp.server] Error handling request
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/aiohttp/web_protocol.py", line 362, in data_received
+    messages, upgraded, tail = self._request_parser.feed_data(data)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "aiohttp/_http_parser.pyx", line 563, in aiohttp._http_parser.HttpParser.feed_data
+aiohttp.http_exceptions.BadHttpMessage: 400, message:
+  Pause on PRI/Upgrade:
+
+    b''
+      ^
+2024-09-08 19:32:57.599 ERROR (MainThread) [aiohttp.server] Error handling request
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/aiohttp/web_protocol.py", line 362, in data_received
+    messages, upgraded, tail = self._request_parser.feed_data(data)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "aiohttp/_http_parser.pyx", line 563, in aiohttp._http_parser.HttpParser.feed_data
+aiohttp.http_exceptions.BadHttpMessage: 400, message:
+  Pause on PRI/Upgrade:
+
+    b''
+      ^
+2024-09-08 21:57:39.383 ERROR (MainThread) [aiohttp.server] Error handling request
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/aiohttp/web_protocol.py", line 362, in data_received
+    messages, upgraded, tail = self._request_parser.feed_data(data)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "aiohttp/_http_parser.pyx", line 563, in aiohttp._http_parser.HttpParser.feed_data
+aiohttp.http_exceptions.BadHttpMessage: 400, message:
+  Pause on PRI/Upgrade:
+
+    b''
+      ^
+2024-09-08 23:46:54.027 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a potential harmful request to: /cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh
+2024-09-08 23:46:54.325 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a potential harmful request to: /cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh
+2024-09-08 23:47:12.008 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a request with a potential harmful query string: /index.php?lang=../../../../../../../../usr/local/lib/php/pearcmd&+config-create+/&/<?echo(md5("hi"));?>+/tmp/index1.php
+2024-09-08 23:47:12.298 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a request with a potential harmful query string: /index.php?lang=../../../../../../../../tmp/index1
+2024-09-09 04:10:54.221 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a potential harmful request to: /cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh
+2024-09-09 04:10:54.374 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a potential harmful request to: /cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh
+2024-09-09 04:11:00.567 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a request with a potential harmful query string: /index.php?lang=../../../../../../../../usr/local/lib/php/pearcmd&+config-create+/&/<?echo(md5("hi"));?>+/tmp/index1.php
+2024-09-09 04:11:00.719 WARNING (MainThread) [homeassistant.components.http.security_filter] Filtered a request with a potential harmful query string: /index.php?lang=../../../../../../../../tmp/index1
+2024-09-09 08:12:50.328 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-09 08:12:50.329 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-09 08:13:42.263 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-09 08:13:42.264 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-09 12:04:30.840 WARNING (MainThread) [homeassistant.components.websocket_api.http.connection] [139881347604416] from 195.88.156.98 (Home Assistant/2024.8.1 (io.robbie.HomeAssistant; build:2024.791; iOS 17.6.1)): Disconnected: Did not receive auth message within 10 seconds
+2024-09-09 14:14:48.102 ERROR (MainThread) [aiohttp.server] Error handling request
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/aiohttp/web_protocol.py", line 362, in data_received
+    messages, upgraded, tail = self._request_parser.feed_data(data)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "aiohttp/_http_parser.pyx", line 563, in aiohttp._http_parser.HttpParser.feed_data
+aiohttp.http_exceptions.BadHttpMessage: 400, message:
+  Pause on PRI/Upgrade:
+
+    b''
+      ^
+2024-09-09 14:52:40.492 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-09 14:52:40.498 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-09 16:19:13.832 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-09 16:19:13.837 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-09 16:40:53.659 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-09 16:40:53.662 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-09 17:23:25.670 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-09 17:23:25.672 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-09 18:18:56.263 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-09 18:18:56.264 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-10 03:03:58.408 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-10 03:03:58.409 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'
+2024-09-10 08:23:37.260 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif(update, 'none', sound) }}'
+2024-09-10 08:23:37.261 WARNING (MainThread) [homeassistant.helpers.template] Template variable warning: 'update' is undefined when rendering '{{ iif((update or sound == 'none'), 0, volume) }}'

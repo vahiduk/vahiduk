@@ -1,0 +1,189 @@
+- id: '1719084998638'
+  alias: FrontdoorNotify
+  description: ''
+  use_blueprint:
+    path: SgtBatten/Stable.yaml
+    input:
+      camera: camera.frontdoorcam
+      notify_device: 2e8cc566c26aae1a71ec380470a4c96a
+      base_url: https://vahiduk.duckdns.org/
+      attachment: snapshot.jpg
+      zone_filter: true
+      zones:
+      - front_steps
+      tap_action: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg'
+      debug: true
+- id: '1719085120779'
+  alias: GarageNotify
+  description: ''
+  use_blueprint:
+    path: SgtBatten/Stable.yaml
+    input:
+      camera: camera.garagecam
+      notify_device: 2e8cc566c26aae1a71ec380470a4c96a
+      base_url: https://vahiduk.duckdns.org/
+      zone_filter: true
+      zones:
+      - back_garage
+      tap_action: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg'
+- id: '1719085184965'
+  alias: SidedoorNotify
+  description: ''
+  use_blueprint:
+    path: SgtBatten/Stable.yaml
+    input:
+      camera: camera.sidedoorcam
+      notify_device: 2e8cc566c26aae1a71ec380470a4c96a
+      base_url: https://vahiduk.duckdns.org/
+      zone_filter: true
+      zones:
+      - side_door
+      tap_action: '{{base_url}}/api/frigate{{client_id}}/notifications/{{id}}/snapshot.jpg'
+- id: '1720562297108'
+  alias: Turn On Living Room TV with WakeOnLan
+  trigger:
+  - platform: webostv.turn_on
+    entity_id: media_player.lg_webos_smart_tv
+  condition: []
+  action:
+  - service: wake_on_lan.send_magic_packet
+    data:
+      mac: 64:E4:A5:E7:73:B1
+- id: '1720562550451'
+  alias: Garage Motion
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.garagecam_motion
+    to: 'on'
+  action:
+  - service: notify.lg_webos_smart_tv
+    data:
+      message: 'Movement detected: Garage'
+      data:
+        icon: /home/homeassistant/images/doorbell.png
+- id: '1722940949752'
+  alias: OpenGarageAutomation
+  description: ''
+  trigger:
+  - event_type: ios.action_fired
+    event_data:
+      actionID: 19C6DF19-99CD-40E1-97DD-54DFFE34C41C
+    platform: event
+  condition: []
+  action:
+  - device_id: a5935c2b3ee56c07be66dd032b2b43fe
+    domain: cover
+    entity_id: 0be945eb47d9cffec599cced9d5b3e37
+    type: open
+  mode: single
+- id: '1722945558965'
+  alias: CloseGarageAutomation
+  description: ''
+  trigger:
+  - platform: event
+    event_data:
+      actionID: 1F5C4DF6-0810-4382-B86D-24B31C39D509
+    event_type: ios.action_fired
+  condition: []
+  action:
+  - device_id: a5935c2b3ee56c07be66dd032b2b43fe
+    domain: cover
+    entity_id: 0be945eb47d9cffec599cced9d5b3e37
+    type: close
+  mode: single
+- id: '1725286579318'
+  alias: OpenGarageAndTurnLight
+  description: ''
+  trigger:
+  - event_type: ios.action_fired
+    event_data:
+      actionID: 19C6DF19-99CD-40E1-97DD-54DFFE34C41C
+    platform: event
+  condition: []
+  action:
+  - device_id: a5935c2b3ee56c07be66dd032b2b43fe
+    domain: cover
+    entity_id: 0be945eb47d9cffec599cced9d5b3e37
+    type: open
+  - action: switch.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.garagelights_switch_1
+  mode: single
+- id: '1725286815733'
+  alias: CloseGarageAndTurnOffLight
+  description: ''
+  trigger:
+  - platform: event
+    event_data:
+      actionID: 1F5C4DF6-0810-4382-B86D-24B31C39D509
+    event_type: ios.action_fired
+  condition: []
+  action:
+  - device_id: a5935c2b3ee56c07be66dd032b2b43fe
+    domain: cover
+    entity_id: 0be945eb47d9cffec599cced9d5b3e37
+    type: close
+  - action: switch.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.garagelights_switch_1
+  mode: single
+- id: '1725455132905'
+  alias: CloseGarageLightsOff
+  description: ''
+  trigger:
+  - platform: event
+    event_type: ios.action_fired
+    event_data:
+      actionID: 150CC89C-260F-4E31-BD59-3510AB1DE46E
+  condition: []
+  action:
+  - action: switch.toggle
+    metadata: {}
+    data: {}
+    enabled: false
+  mode: single
+- id: '1725636966443'
+  alias: Action OpenGarage and Turn Light on
+  description: Action OpenGarage and Turn Light on
+  trigger:
+  - platform: event
+    event_type: ios.action_fired
+    event_data:
+      actionName: Fred
+  condition: []
+  action:
+  - action: switch.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.garagelights_switch_1
+  - action: cover.open_cover
+    metadata: {}
+    data: {}
+    target:
+      device_id: a5935c2b3ee56c07be66dd032b2b43fe
+  mode: single
+- id: '1725636966444'
+  alias: Action CloseGarage and Turn Light Off
+  description: Action OpenGarage and Turn Light Off
+  trigger:
+  - platform: event
+    event_type: ios.action_fired
+    event_data:
+      actionName: Fred
+  condition: []
+  action:
+  - action: switch.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.garagelights_switch_1
+  - action: cover.close_cover
+    target:
+      entity_id: cover.smart_garage_door_1909187155908590801948e1e95224d7_garage
+    data: {}
+  mode: single

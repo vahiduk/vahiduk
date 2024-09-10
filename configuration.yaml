@@ -1,0 +1,32 @@
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+http:
+  ssl_certificate: /ssl/fullchain.pem
+  ssl_key: /ssl/privkey.pem
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+# LG TV setup
+wake_on_lan: # enables `wake_on_lan` integration
+
+ios:
+  actions:
+    - name: Fred
+      background_color: "#000000" # Requires `use_custom_colors`
+      label:
+        text: "Hello, World"
+        color: "#ff0000" # Requires `use_custom_colors`
+      icon:
+        icon: earth
+        color: "#ffffff"
+      show_in_carplay: true
+      show_in_watch: true
+      use_custom_colors: true

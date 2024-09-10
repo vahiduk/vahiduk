@@ -1,0 +1,46 @@
+homeassistant: true
+advanced:
+  network_key:
+    - 157
+    - 108
+    - 207
+    - 36
+    - 247
+    - 60
+    - 23
+    - 231
+    - 159
+    - 203
+    - 2
+    - 30
+    - 15
+    - 241
+    - 146
+    - 122
+  pan_id: 58149
+  ext_pan_id:
+    - 236
+    - 76
+    - 200
+    - 51
+    - 183
+    - 189
+    - 87
+    - 141
+  homeassistant_legacy_entity_attributes: false
+  legacy_api: false
+  legacy_availability_payload: false
+mqtt:
+  server: mqtt://192.168.1.58:1883
+  user: z2m_user
+  password: z2m_pass
+serial:
+  port: /dev/ttyACM0
+  adapter: ezsp
+frontend:
+  port: 8099
+device_options:
+  legacy: false
+devices:
+  '0x0cae5ffffed028a4':
+    friendly_name: sanoffsensor

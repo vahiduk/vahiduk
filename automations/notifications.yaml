@@ -1,0 +1,79 @@
+---
+#-
+#              _   _  __ _           _   _
+#  _ __   ___ | |_(_)/ _(_) ___ __ _| |_(_) ___  _ __  ___
+# | '_ \ / _ \| __| | |_| |/ __/ _` | __| |/ _ \| '_ \/ __|
+# | | | | (_) | |_| |  _| | (_| (_| | |_| | (_) | | | \__ \
+# |_| |_|\___/ \__|_|_| |_|\___\__,_|\__|_|\___/|_| |_|___/
+#
+#
+#- from github.com/basnijholt/home-assistant-config
+
+- alias: "Notifications: Marcella arrived at Rotterdam Centraal"
+  trigger:
+    platform: state
+    entity_id: device_tracker.marcella_iphone
+    to: rotterdam_centraal
+  action:
+    service: notify.iphone_bas
+    data:
+      title: "Arriving"
+      message: "Marcella arrived at Rotterdam Centraal"
+
+- alias: "Notifications: front door has opened"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.openclose_front_door
+    to: "on"
+  condition:
+    condition: state
+    entity_id: input_boolean.front_door_open_warning
+    state: "on"
+  action:
+    - service: notify.mobile_app_basnijholt_iphone_13
+      data:
+        title: Security
+        message: Front door opened!
+    - service: notify.iphone_bas
+      data:
+        title: Security
+        message: Front door opened!
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.front_door_open_warning
+
+- alias: "Notifications: Hourly Mantra Notification"
+  trigger:
+    - platform: time_pattern
+      hours: "/1"
+  condition:
+    - "{{ not is_state('input_select.sleep_mode', 'total') }}"
+  action:
+    - service: notify.mobile_app_marcella_iphone_14_pro
+      data:
+        title: "Hourly Mantra"
+        message: >
+          {% set mantras = [
+            "I am enough",
+            "I don't need to prove myself",
+            "I am loved"
+          ] %}
+          {% set mantra = mantras | random %}
+          {{ mantra }}
+        data:
+          actions:
+            - action: "AGREE_MANTRA"
+              title: "I agree"
+              activationMode: background
+              authenticationRequired: true
+              destructive: true
+    - wait_for_trigger:
+        platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: "AGREE_MANTRA"
+      timeout: "01:00:00"
+      continue_on_timeout: false
+
+    - service: notify.mobile_app_marcella_iphone_14_pro
+      data:
+        message: "Yes you are! ❤️😘🥰💖💕🌷🌼🌈✨🎉🍀"

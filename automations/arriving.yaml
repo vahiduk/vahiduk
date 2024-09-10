@@ -1,0 +1,42 @@
+---
+#-
+#                  _       _
+#   __ _ _ __ _ __(_)_   _(_)_ __   __ _
+#  / _` | '__| '__| \ \ / / | '_ \ / _` |
+# | (_| | |  | |  | |\ V /| | | | | (_| |
+#  \__,_|_|  |_|  |_| \_/ |_|_| |_|\__, |
+#                                  |___/
+#
+#- from github.com/basnijholt/home-assistant-config
+
+# XXX: sometimes triggers when leaving!
+- alias: "Arriving: switch music from iPhone to speakers if no one is home"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.openclose_front_door
+    from: "off"
+    to: "on"
+  condition:
+    - condition: state
+      entity_id: person.marcella
+      state: not_home
+    - condition: state
+      entity_id: input_boolean.guest_mode
+      state: "off"
+    - "{{ is_state_attr('media_player.spotify', 'source', 'basnijholt-iphone') }}"
+    - "{{ is_state('media_player.spotify', 'playing') }}"
+  action:
+    - service: notify.iphone_bas
+      data:
+        title: "Arriving"
+        message: "Switched music from phone to speakers"
+    - service: media_player.turn_on
+      entity_id: media_player.kef_ls50
+    - service: media_player.select_source
+      entity_id: media_player.kef_ls50
+      data:
+        source: Spotify
+    - service: media_player.select_source
+      entity_id: media_player.spotify
+      data:
+        source: KEF LS50

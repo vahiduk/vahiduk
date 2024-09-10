@@ -1,0 +1,152 @@
+---
+#-
+#       _ _                 _
+#   ___| (_)_ __ ___   __ _| |_ ___
+#  / __| | | '_ ` _ \ / _` | __/ _ \
+# | (__| | | | | | | | (_| | ||  __/
+#  \___|_|_|_| |_| |_|\__,_|\__\___|
+#
+#
+#- from github.com/basnijholt/home-assistant-config
+
+- alias: "Climate: turn on the heating 30 min before waking up"
+  trigger:
+    platform: template
+    value_template: >
+      {{ states("sensor.time")[0:5] == states("sensor.half_hour_before_alarm") }}
+  condition:
+    condition: state
+    entity_id:
+      - input_boolean.alarm_clock
+      - input_boolean.automatic_temperature
+    state: "on"
+  action:
+    service: script.set_high_temperature
+
+- alias: "Climate: turn on the heating when going home"
+  trigger:
+    platform: numeric_state
+    entity_id: proximity.home
+    below: 6
+    above: 1
+  condition:
+    - condition: state
+      entity_id: input_boolean.automatic_temperature
+      state: "on"
+    - condition: time
+      after: "16:00:00"
+      before: "22:00:00"
+    - "{{ is_state_attr('proximity.home', 'dir_of_travel', 'towards') }}"
+    - "{{ not is_state_attr('climate.thermostat', 'temperature', states('input_number.temperature_high')) }}"
+    - condition: state
+      entity_id: binary_sensor.no_one_home
+      state: "on"
+  action:
+    - service: script.set_high_temperature
+    - service: notify.all_iphones
+      data:
+        title: "Climate"
+        message: "Automatically turned on the heating 🥵℃"
+
+- alias: "Climate: turn off the heating at 22:00"
+  trigger:
+    platform: time
+    at: "22:00"
+  condition:
+    - condition: state
+      entity_id: input_boolean.automatic_temperature
+      state: "on"
+    - condition: state
+      entity_id: binary_sensor.no_one_home
+      state: "off"
+    - "{{ not is_state_attr('climate.thermostat', 'temperature', states('input_number.temperature_low')|float(0)) }}"
+  action:
+    - service: script.set_low_temperature
+    - service: notify.all_iphones
+      data:
+        message: "Turned off the heating 🥶, click to turn it on again?"
+        data:
+          actions:
+            - action: TURN_ON_HEATING
+              title: Turn on heating
+              activationMode: background
+              authenticationRequired: true
+              destructive: true
+    - wait_for_trigger:
+        platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: TURN_ON_HEATING
+      timeout: "00:00:20"
+      continue_on_timeout: false
+    - service: script.set_high_temperature
+
+- alias: "Climate: set outside temperature every hour"
+  trigger:
+    platform: time_pattern
+    hours: "/1"
+  action:
+    service: mqtt.publish
+    data:
+      topic: actions/otmonitor/outside
+      payload_template: >
+        {{ state_attr("weather.huis", "temperature") }}
+
+- alias: "Climate: warning when heating on and living room door open"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.openclose_bedroom
+    to: "on"
+    for: "00:05:00"
+  condition: "{{ state_attr('climate.thermostat', 'temperature') >= 18 }}"
+  action:
+    - repeat:
+        while:
+          - condition: state
+            entity_id: binary_sensor.openclose_bedroom
+            state: "on"
+          - condition: template
+            value_template: "{{ repeat.index <= 6 }}"
+        sequence:
+          - service: notify.all
+            data:
+              title: "Climate"
+              message: "The living room door is open and the heating is on! ⚠️ Warning #{{ repeat.index }}!"
+          - delay: "00:05:00"
+    - condition: state
+      entity_id: binary_sensor.openclose_bedroom
+      state: "on"
+    - service: notify.all
+      data:
+        title: "Climate"
+        message: "Turning off the heating!"
+    - service: climate.set_temperature
+      entity_id: climate.thermostat
+      data:
+        temperature: >
+          {{ states("input_number.temperature_low") }}
+
+- alias: "Climate: set temperature setpoint to 50 °C"
+  trigger:
+    platform: time_pattern
+    hours: "/2"
+  action:
+    service: mqtt.publish
+    data:
+      topic: actions/otmonitor/maxdhwsetpt
+      payload: "50"
+
+- alias: "Climate: automatically turn off spaceheater when no-one is in the guest room"
+  trigger:
+    - platform: time_pattern
+      minutes: "/10"
+    - platform: state
+      entity_id: binary_sensor.activity_in_guest_room
+      to: "off"
+  condition:
+    condition: state
+    entity_id: binary_sensor.activity_in_guest_room
+    state: "off"
+  action:
+    service: switch.turn_off
+    entity_id: switch.space_heater

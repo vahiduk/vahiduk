@@ -1,0 +1,15 @@
+[2024-07-09 10:35:05] info: 	z2m: Logging to console, file (filename: log.log)
+[2024-07-09 10:35:05] info: 	z2m: Starting Zigbee2MQTT version 1.39.0 (commit #unknown)
+[2024-07-09 10:35:05] info: 	z2m: Starting zigbee-herdsman (0.50.1)
+[2024-07-09 10:35:06] warning: 	zh:ezsp: Deprecated driver 'ezsp' currently in use, 'ember' will become the officially supported EmberZNet driver in next release. If using Zigbee2MQTT see https://github.com/Koenkk/zigbee2mqtt/discussions/21462
+[2024-07-09 10:35:11] info: 	z2m: zigbee-herdsman started (resumed)
+[2024-07-09 10:35:11] info: 	z2m: Coordinator firmware version: '{"meta":{"maintrel":"3 ","majorrel":"6","minorrel":"10","product":8,"revision":"6.10.3.0 build 297"},"type":"EZSP v8"}'
+[2024-07-09 10:35:11] info: 	z2m: Currently 0 devices are joined:
+[2024-07-09 10:35:11] info: 	z2m: Zigbee: disabling joining new devices.
+[2024-07-09 10:35:12] info: 	z2m: Connecting to MQTT server at mqtt://192.168.1.58:1883
+[2024-07-09 10:35:12] error: 	z2m: MQTT error: Connection refused: Not authorized
+[2024-07-09 10:35:12] error: 	z2m: MQTT failed to connect, exiting...
+[2024-07-09 10:35:12] info: 	z2m: Stopping zigbee-herdsman...
+[2024-07-09 10:35:13] error: 	z2m: MQTT error: Connection refused: Not authorized
+[2024-07-09 10:35:13] info: 	zh:controller: Wrote coordinator backup to '/config/zigbee2mqtt/coordinator_backup.json'
+[2024-07-09 10:35:13] info: 	z2m: Stopped zigbee-herdsman

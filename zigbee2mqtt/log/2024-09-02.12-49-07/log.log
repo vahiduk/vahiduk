@@ -1,0 +1,26 @@
+[2024-09-02 12:49:08] info: 	z2m: Logging to console, file (filename: log.log)
+[2024-09-02 12:49:08] info: 	z2m: Starting Zigbee2MQTT version 1.39.1 (commit #unknown)
+[2024-09-02 12:49:08] info: 	z2m: Starting zigbee-herdsman (0.55.3)
+[2024-09-02 12:49:10] warning: 	zh:ezsp: Deprecated driver 'ezsp' currently in use, 'ember' will become the officially supported EmberZNet driver in next release. If using Zigbee2MQTT see https://github.com/Koenkk/zigbee2mqtt/discussions/21462
+[2024-09-02 12:49:15] info: 	z2m: zigbee-herdsman started (resumed)
+[2024-09-02 12:49:15] info: 	z2m: Coordinator firmware version: '{"meta":{"maintrel":"3 ","majorrel":"6","minorrel":"10","product":8,"revision":"6.10.3.0 build 297"},"type":"EZSP v8"}'
+[2024-09-02 12:49:15] info: 	z2m: Currently 1 devices are joined:
+[2024-09-02 12:49:15] info: 	z2m: sanoffsensor (0x0cae5ffffed028a4): SNZB-02P - SONOFF Temperature and humidity sensor (EndDevice)
+[2024-09-02 12:49:15] info: 	z2m: Zigbee: disabling joining new devices.
+[2024-09-02 12:49:15] info: 	z2m: Connecting to MQTT server at mqtt://192.168.1.58:1883
+[2024-09-02 12:49:16] info: 	z2m: Connected to MQTT server
+[2024-09-02 12:49:16] info: 	z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/bridge/state', payload '{"state":"online"}'
+[2024-09-02 12:49:16] info: 	z2m: Started frontend on port 8099
+[2024-09-02 12:49:16] info: 	z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/bridge/state', payload '{"state":"online"}'
+[2024-09-02 12:49:16] info: 	z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/sanoffsensor', payload '{"battery":100,"humidity":66.6,"linkquality":108,"temperature":21}'
+[2024-09-02 12:49:16] info: 	z2m: Zigbee2MQTT started!
+[2024-09-02 12:49:21] info: 	z2m:mqtt: MQTT publish: topic 'homeassistant/binary_sensor/1221051039810110150109113116116_0x90395efffe33fff7/connection_state/config', payload '{"device":{"hw_version":"EZSP v8 6.10.3.0 build 297","identifiers":["zigbee2mqtt_bridge_0x90395efffe33fff7"],"manufacturer":"Zigbee2MQTT","model":"Bridge","name":"Zigbee2MQTT Bridge","sw_version":"1.39.1"},"device_class":"connectivity","entity_category":"diagnostic","name":"Connection state","object_id":"zigbee2mqtt_bridge_connection_state","origin":{"name":"Zigbee2MQTT","sw":"1.39.1","url":"https://www.zigbee2mqtt.io"},"payload_off":"offline","payload_on":"online","state_topic":"zigbee2mqtt/bridge/state","unique_id":"bridge_0x90395efffe33fff7_connection_state_zigbee2mqtt","value_template":"{{ value_json.state }}"}'
+[2024-09-02 13:49:10] warning: 	zh:ezsp: Deprecated driver 'ezsp' currently in use, 'ember' will become the officially supported EmberZNet driver in next release. If using Zigbee2MQTT see https://github.com/Koenkk/zigbee2mqtt/discussions/21462
+[2024-09-02 14:49:10] warning: 	zh:ezsp: Deprecated driver 'ezsp' currently in use, 'ember' will become the officially supported EmberZNet driver in next release. If using Zigbee2MQTT see https://github.com/Koenkk/zigbee2mqtt/discussions/21462
+[2024-09-02 15:49:10] warning: 	zh:ezsp: Deprecated driver 'ezsp' currently in use, 'ember' will become the officially supported EmberZNet driver in next release. If using Zigbee2MQTT see https://github.com/Koenkk/zigbee2mqtt/discussions/21462
+[2024-09-02 16:08:38] info: 	z2m:mqtt: MQTT publish: topic 'zigbee2mqtt/bridge/state', payload '{"state":"offline"}'
+[2024-09-02 16:08:38] info: 	z2m: Disconnecting from MQTT server
+[2024-09-02 16:08:38] info: 	z2m: Stopping zigbee-herdsman...
+[2024-09-02 16:08:38] info: 	zh:controller: Wrote coordinator backup to '/config/zigbee2mqtt/coordinator_backup.json'
+[2024-09-02 16:08:38] info: 	z2m: Stopped zigbee-herdsman
+[2024-09-02 16:08:38] info: 	z2m: Stopped Zigbee2MQTT

@@ -1,0 +1,156 @@
+---
+#-
+#                           _ _
+#  ___  ___  ___ _   _ _ __(_) |_ _   _
+# / __|/ _ \/ __| | | | '__| | __| | | |
+# \__ \  __/ (__| |_| | |  | | |_| |_| |
+# |___/\___|\___|\__,_|_|  |_|\__|\__, |
+#                                 |___/
+#
+#- from github.com/basnijholt/home-assistant-config
+- alias: "Security: motion detected but we are not home"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.motion_detected
+    from: "off"
+    to: "on"
+  condition:
+    - condition: state
+      entity_id: group.persons
+      state: not_home
+    - condition: state
+      entity_id: vacuum.valetudo_vacuum
+      state: "docked"
+  action:
+    - service: notify.all_iphones
+      data:
+        message: "Security: motion is detected, but we are not home."
+        data:
+          actions:
+            - action: SOUND_ALARM
+              title: Sound alarm
+              activationMode: background
+              authenticationRequired: true
+              destructive: true
+    - wait_for_trigger:
+        platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: SOUND_ALARM
+      timeout: "01:00:00"
+      continue_on_timeout: false
+    - service: light.turn_on
+      entity_id: all
+      data:
+        flash: long
+        color_name: red
+
+- alias: "Security: front door has been open for more than 5 minutes"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.openclose_front_door
+    from: "off"
+    to: "on"
+    for: "00:05:00"
+  action:
+    service: notify.all_iphones
+    data:
+      title: "Security"
+      message: "The front door has been open for more than 5 minutes."
+
+- alias: "Security: utility room door has been open for more than 5 minutes"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.openclose_front_door
+    from: "off"
+    to: "on"
+    for: "00:05:00"
+  action:
+    service: notify.all_iphones
+    data:
+      title: "Security"
+      message: "The utility room door has been open for more than 5 minutes."
+
+- alias: "Security: no one is home but high power usage"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.no_one_home
+      to: "on"
+    - platform: time_pattern
+      minutes: "/10"
+  condition:
+    - condition: state
+      entity_id: binary_sensor.no_one_home
+      state: "on"
+    - condition: numeric_state
+      entity_id: sensor.power_consumption
+      above: 0.7
+  action:
+    service: notify.all_iphones
+    data:
+      title: "Security"
+      message: >
+        No one is home and we are using a lot of energy
+        ({{ states('sensor.power_consumption') }} kW now)! ⚡️
+
+- alias: "Security: bathroom door has opened"
+  trigger:
+    platform: state
+    entity_id: binary_sensor.openclose_bathroom
+    to: "on"
+  condition:
+    condition: state
+    entity_id: input_boolean.bathroom_door_open_warning
+    state: "on"
+  action:
+    - service: notify.bas
+      data:
+        title: Security
+        message: Office door opened!
+    - service: notify.iphone_bas
+      data:
+        title: Security
+        message: Office door opened!
+    - service: light.turn_on
+      data:
+        entity_id: light.philips_go
+        flash: short
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.bathroom_door_open_warning
+
+- alias: "Security: Door to outside open"
+  description: ''
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.door_to_outside_open
+      to: 'on'
+      for:
+        seconds: 15
+  action:
+    - repeat:
+        while:
+          - condition: state
+            entity_id: binary_sensor.door_to_outside_open
+            state: 'on'
+        sequence:
+          # First turning off such that the lights stay on
+          - service: light.turn_off
+            data:
+              entity_id:
+                - light.garage_outside
+                - light.outside_front_door
+                - light.bedroom_outside
+                - light.utility_room
+          - delay:
+              seconds: 1
+          - service: light.turn_on
+            data:
+              entity_id:
+                - light.garage_outside
+                - light.outside_front_door
+                - light.bedroom_outside
+                - light.utility_room
+              brightness_pct: 100
+          - delay:
+              seconds: 1
+  mode: single
