@@ -1,3 +1,8 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
 # home assistant
 
 ## You can whitelist files/folders with !, these will not be ignored.
