@@ -13,20 +13,7 @@ frontend:
 automation: !include automations.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml
+ios: !include includes/ios.yaml
 
 # LG TV setup
 wake_on_lan: # enables `wake_on_lan` integration
-
-ios:
-  actions:
-    - name: Fred
-      background_color: "#000000" # Requires `use_custom_colors`
-      label:
-        text: "Hello, World"
-        color: "#ff0000" # Requires `use_custom_colors`
-      icon:
-        icon: earth
-        color: "#ffffff"
-      show_in_carplay: true
-      show_in_watch: true
-      use_custom_colors: true

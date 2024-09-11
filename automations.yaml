@@ -49,111 +49,31 @@
   - service: wake_on_lan.send_magic_packet
     data:
       mac: 64:E4:A5:E7:73:B1
-- id: '1720562550451'
-  alias: Garage Motion
-  trigger:
-  - platform: state
-    entity_id: binary_sensor.garagecam_motion
-    to: 'on'
-  action:
-  - service: notify.lg_webos_smart_tv
-    data:
-      message: 'Movement detected: Garage'
-      data:
-        icon: /home/homeassistant/images/doorbell.png
-- id: '1722940949752'
-  alias: OpenGarageAutomation
-  description: ''
-  trigger:
-  - event_type: ios.action_fired
-    event_data:
-      actionID: 19C6DF19-99CD-40E1-97DD-54DFFE34C41C
-    platform: event
-  condition: []
-  action:
-  - device_id: a5935c2b3ee56c07be66dd032b2b43fe
-    domain: cover
-    entity_id: 0be945eb47d9cffec599cced9d5b3e37
-    type: open
-  mode: single
-- id: '1722945558965'
-  alias: CloseGarageAutomation
-  description: ''
+
+- id: '1726044335076'
+  alias: Automation:OpenGarage
+  description: Open Garage
   trigger:
   - platform: event
-    event_data:
-      actionID: 1F5C4DF6-0810-4382-B86D-24B31C39D509
     event_type: ios.action_fired
-  condition: []
-  action:
-  - device_id: a5935c2b3ee56c07be66dd032b2b43fe
-    domain: cover
-    entity_id: 0be945eb47d9cffec599cced9d5b3e37
-    type: close
-  mode: single
-- id: '1725286579318'
-  alias: OpenGarageAndTurnLight
-  description: ''
-  trigger:
-  - event_type: ios.action_fired
     event_data:
-      actionID: 19C6DF19-99CD-40E1-97DD-54DFFE34C41C
-    platform: event
+      actionName: OpenGarage
   condition: []
   action:
-  - device_id: a5935c2b3ee56c07be66dd032b2b43fe
-    domain: cover
-    entity_id: 0be945eb47d9cffec599cced9d5b3e37
-    type: open
-  - action: switch.turn_on
-    metadata: {}
-    data: {}
+  - action: cover.open_cover
     target:
-      entity_id: switch.garagelights_switch_1
-  mode: single
-- id: '1725286815733'
-  alias: CloseGarageAndTurnOffLight
-  description: ''
-  trigger:
-  - platform: event
-    event_data:
-      actionID: 1F5C4DF6-0810-4382-B86D-24B31C39D509
-    event_type: ios.action_fired
-  condition: []
-  action:
-  - device_id: a5935c2b3ee56c07be66dd032b2b43fe
-    domain: cover
-    entity_id: 0be945eb47d9cffec599cced9d5b3e37
-    type: close
-  - action: switch.turn_off
-    metadata: {}
+      entity_id: cover.smart_garage_door_1909187155908590801948e1e95224d7_garage
     data: {}
-    target:
-      entity_id: switch.garagelights_switch_1
   mode: single
-- id: '1725455132905'
-  alias: CloseGarageLightsOff
-  description: ''
+
+- id: '1726044335077'
+  alias: Automation:OpenGarage and Turn Light On
+  description: Open Garage and Turn Light On
   trigger:
   - platform: event
     event_type: ios.action_fired
     event_data:
-      actionID: 150CC89C-260F-4E31-BD59-3510AB1DE46E
-  condition: []
-  action:
-  - action: switch.toggle
-    metadata: {}
-    data: {}
-    enabled: false
-  mode: single
-- id: '1725636966443'
-  alias: Action OpenGarage and Turn Light on
-  description: Action OpenGarage and Turn Light on
-  trigger:
-  - platform: event
-    event_type: ios.action_fired
-    event_data:
-      actionName: Fred
+      actionName: OpenGarageLightOn
   condition: []
   action:
   - action: switch.turn_on
@@ -162,19 +82,35 @@
     target:
       entity_id: switch.garagelights_switch_1
   - action: cover.open_cover
-    metadata: {}
-    data: {}
     target:
-      device_id: a5935c2b3ee56c07be66dd032b2b43fe
+      entity_id: cover.smart_garage_door_1909187155908590801948e1e95224d7_garage
+    data: {}
   mode: single
-- id: '1725636966444'
-  alias: Action CloseGarage and Turn Light Off
-  description: Action OpenGarage and Turn Light Off
+
+- id: '1726044335078'
+  alias: Automation:CloseGarage
+  description: Close Garage
   trigger:
   - platform: event
     event_type: ios.action_fired
     event_data:
-      actionName: Fred
+      actionName: CloseGarage
+  condition: []
+  action:
+  - action: cover.close_cover
+    target:
+      entity_id: cover.smart_garage_door_1909187155908590801948e1e95224d7_garage
+    data: {}
+  mode: single
+
+- id: '1726044335079'
+  alias: Automation:CloseGarage and Turn Light Off
+  description: Close Garage and Turn Light Off
+  trigger:
+  - platform: event
+    event_type: ios.action_fired
+    event_data:
+      actionName: CloseGarageLightOff
   condition: []
   action:
   - action: switch.turn_off
@@ -187,3 +123,4 @@
       entity_id: cover.smart_garage_door_1909187155908590801948e1e95224d7_garage
     data: {}
   mode: single
+

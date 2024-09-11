@@ -4,6 +4,9 @@ __pycache__/
 *$py.class
 
 # home assistant
+.HA_VERSION
+*.db-shm
+*.db-wal
 
 ## You can whitelist files/folders with !, these will not be ignored.
 !*.yaml
